@@ -24,6 +24,6 @@ All users can interact with the system insert invoices search and etc..
   - The role of auditor can only view the invoices and search for invoices for all users.
 
 ## Data Base Model:
-   ![](DataBase%20Model.PNG)
+   ![](ScreenShoots/DataBase%20Model.PNG)
 
 
