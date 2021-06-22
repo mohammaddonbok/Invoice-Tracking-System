@@ -26,4 +26,16 @@ All users can interact with the system insert invoices search and etc..
 ## Data Base Model:
    ![](ScreenShoots/DataBase%20Model.PNG)
 
+## Admin panel to set User Status
+   ![](ScreenShoots/Capture.PNG)
+
+## Admin control List
+   ![](ScreenShoots/adminList.PNG)
+
+## Creating Invoice
+   ![](ScreenShoots/createInvoice.PNG)
+   
+## Edit Invoice
+   ![](ScreenShoots/edit.PNG)
+
 
