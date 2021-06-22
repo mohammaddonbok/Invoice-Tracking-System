@@ -15,9 +15,9 @@ All users can interact with the system insert invoices search and etc..
     - Can add , edit items on invoices.
     - Can deactivate and activate users also can change invoices owner so if the super-admin deactivate user he can change the owner of specific invoice to active user. 
 -SUPPORT-USER
-  - Can log-in , log-out.
-  -it represent the company sales representative who can perform actions only on his own invoices.
-  -Can add , delete , edit and view and search his own invoices only and he don’t have access on others invoices.
+  -Can log-in , log-out
+  -it represent the company sales representative who can perform actions only on his own invoices
+  -Can add , delete , edit and view and search his own invoices only and he don’t have access on others invoices
 -Auditor
   - Can log-in , log-out.
   -Auditor role represent the company finance audit who can view all invoices.
