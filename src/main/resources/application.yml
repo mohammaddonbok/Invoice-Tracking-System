@@ -1,0 +1,6 @@
+auth:
+  expiration: 604800
+  secret: letsDoItBro1234
+  header: Authorization
+
+origin: "http://localhost:4200/"

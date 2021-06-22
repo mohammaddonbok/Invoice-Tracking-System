@@ -2,17 +2,21 @@ package com.example.training.models;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long Id;
@@ -23,21 +27,24 @@ public class User {
     @Size(min = 3, max = 50, message = "Last name must be greater than 3 characters")
     private String lastName;
 
-    @Size(min = 1, message = "Email cannot be blank")
+
+    private boolean activated = true;
+
+    @NotBlank(message = "Email cannot be blank")
     @Email(message = "Email must be valid")
     private String email;
 
+    @NotEmpty
     @Size(min=2, message="Password must be greater than 2 characters")
     private String password;
-
 
     @Column(updatable=false)
     private Date createdAt;
 
     private Date updatedAt;
 
-//    @JsonBackReference
-    @ManyToMany(fetch=FetchType.LAZY)
+    @JsonBackReference
+    @ManyToMany(fetch=FetchType.EAGER  )
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name="user_id"),
@@ -45,7 +52,7 @@ public class User {
     )
     private List<Role> roles;
 
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner" , cascade = CascadeType.ALL)
     private List<Invoice> userInvoices;
     @PrePersist
     protected void onCreate(){
@@ -59,13 +66,25 @@ public class User {
 
     public User() {
     }
+    public User(String email , String password ){
+        this.email = email;
+        this.password = password;
 
+    }
     public Long getId() {
         return Id;
     }
 
     public void setId(Long id) {
         Id = id;
+    }
+
+    public boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated ) {
+        this.activated = activated;
     }
 
     public String getFirstName() {
@@ -92,6 +111,14 @@ public class User {
         this.email = email;
     }
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+
+    }
+
+    @Override
     public String getPassword() {
         return password;
     }
@@ -123,4 +150,36 @@ public class User {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
+
+
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+
+
+
 }
