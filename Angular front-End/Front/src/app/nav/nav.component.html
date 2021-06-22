@@ -1,0 +1,22 @@
+<nav class=" navbar navbar-dark bg-dark row" >
+  <ul >
+    <li class=" col-4 sizing">
+      <a class="mat-tab-link links" routerLink="invoiceList" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
+         *ngIf=" log.loggedIn()"
+      >
+        Invoices List
+      </a>
+    </li>
+    <li class="col-4 sizing">
+      <button class="btn btn-dark" (click)="goToSignUp()" *ngIf="isAdmin()" > Sign Up </button>
+    </li>
+    <li class="col-4 sizing">
+      <a class=" mat-tab-link links" routerLink="logout" routerLinkActive="active" *ngIf=" isLoggedIn()"
+         (click)="logOut()"
+      > Log Out </a>
+    </li>
+  </ul>
+  <h2 class="row">{{getFirstName()}}</h2>
+
+</nav>
+

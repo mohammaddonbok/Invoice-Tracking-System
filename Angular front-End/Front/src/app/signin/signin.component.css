@@ -1,0 +1,24 @@
+.container{
+  width: 500px;
+  height: 400px;
+  margin: 50px auto ;
+}
+form{
+  width: 100%;
+}
+.inputs{
+  width: 80%;
+  margin-left: 11%;
+  margin-top: 10px;
+}
+button{
+  width:150px;
+  margin: auto 160px;
+}
+h1{
+  width:150px;
+  text-align: center;
+  font-size: 28px;
+  margin-left: 160px;
+
+}

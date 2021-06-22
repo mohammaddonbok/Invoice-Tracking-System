@@ -1,0 +1,15 @@
+.links{
+  text-decoration: none;
+  color: black;
+}
+.table{
+  margin-top: 20px;
+}
+.search-box{
+  width: 30%;
+  margin:auto;
+}
+.overTable{
+  display: flex;
+  justify-content: space-between;
+}

@@ -1,0 +1,76 @@
+
+<form class="middle" [formGroup]="registerForm">
+  <h1 class="header" >
+    Sign Up
+  </h1>
+<mat-form-field appearance="fill" class="inputs">
+  <mat-label>First name</mat-label>
+  <input matInput  formControlName="firstName"
+         name="firstName"
+  >
+  <mat-error  >{{getErrorMessage('firstName' , 'required') || getErrorMessage('firstName','pattern') }}</mat-error>
+</mat-form-field>
+  <mat-form-field appearance="fill" class="inputs">
+    <mat-label>Last name</mat-label>
+    <input matInput  formControlName="lastName" name="lastName">
+    <mat-error  >{{getErrorMessage('lastName' , 'required') || getErrorMessage('lastName','pattern') }}</mat-error>
+
+  </mat-form-field>
+  <div class="example-container">
+    <mat-form-field appearance="fill" class="inputs">
+      <mat-label>Enter your email</mat-label>
+      <input matInput placeholder="pat@example.com" name="email"  formControlName="email"  required>
+        <mat-error >
+        {{getErrorMessage('email','email') || getErrorMessage('email','required') || errors}}
+        </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="inputs">
+      <mat-label>Enter your password</mat-label>
+      <input matInput type="password"   formControlName="password" name="password">
+      <mat-error >{{getErrorMessage('password','required')}}</mat-error>
+    </mat-form-field>
+
+  </div>
+  <ngb-accordion #acc="ngbAccordion">
+    <ngb-panel id="toggle-1" title="Support Role">
+      <ng-template ngbPanelContent>
+        <pre>
+    The Role of Support User:
+      - Can Add/create invoices.
+      - Edit his related invoices.
+      - Delete his related invoices.
+      - View his related invoices.
+        </pre>
+      </ng-template>
+    </ngb-panel>
+    <ngb-panel id="toggle-2" title="Auditor role">
+      <ng-template ngbPanelContent>
+        <pre>
+    The Role of Auditor:
+      - Can only view all invoices.
+      - Can search for invoices in the system.
+        </pre>
+      </ng-template>
+    </ngb-panel>
+  </ngb-accordion><br>
+  <label class="container">Support-User
+    <input
+      type="radio"
+      id="support"
+      name="role"
+      value="2"
+      formControlName="role">
+    <span class="checkmark" ></span>
+  </label>
+  <label class="container">Auditor
+    <input type="radio"
+           id="auditor"
+           name="role"
+           value="3"
+           formControlName="role"
+    >
+    <span class="checkmark" ></span>
+  </label>
+  <br>
+  <button class="btn btn-dark middle" style="margin-bottom: 10px" type="submit" (click)="onSubmit()">Register</button>
+</form>

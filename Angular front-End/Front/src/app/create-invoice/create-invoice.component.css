@@ -1,0 +1,70 @@
+.container{
+  margin-top: 0;
+}
+.invoiceInfo {
+  width: 40%;
+  display: inline-block;
+}
+
+.invoiceInfo mat-form-field {
+  width: 100%;
+}
+
+.formItem {
+  width: 100%;
+  vertical-align: top;
+  display: inline-block;
+  margin-left: -50px;
+}
+.formItem table{
+  width: 100%;
+}
+
+.itemss {
+  width: 50%;
+  float: right;
+}
+
+.itemInfo {
+  display: inline-block;
+  vertical-align: top;
+  margin-right: 10%;
+
+  margin-bottom:5% ;
+}
+
+.itemInfo mat-form-field {
+  width: 30%;
+  margin-right: 10px ;
+}
+
+:host {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+
+.example-right-align {
+  text-align: right;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
+}
+.height{
+  height: 46px;
+  width: 30%;
+}
+.array{
+  display: flex;
+  justify-content: start;
+}
+.td{
+ vertical-align: middle;
+}
