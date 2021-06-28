@@ -4,9 +4,10 @@ nav {
 }
 
 h2 {
-  justify-content: flex-end;
+margin-left: 90%;
   font-weight: bold;
   margin-bottom: 10px;
+  display: inline-block;
 }
 
 ul {

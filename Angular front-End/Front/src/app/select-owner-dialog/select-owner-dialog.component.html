@@ -1,0 +1,19 @@
+<form [formGroup]="invoiceOwner">
+<label >Owner:</label>
+<mat-form-field appearance="outline">
+  <mat-label >Select User</mat-label>
+  <mat-select formControlName="owner">
+    <mat-option>--</mat-option>
+    <mat-option *ngFor="let user of ListOfUsers" value="{{user.email}}">
+      {{user.firstName}} {{user.lastName}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+</form>
+<button type="button" class="btn btn-dark"
+        mat-button
+        [mat-dialog-close]="true"
+        (click)="onSubmit()"
+>
+  Submit
+</button>

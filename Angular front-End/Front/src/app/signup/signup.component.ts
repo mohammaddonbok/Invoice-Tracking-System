@@ -80,7 +80,8 @@ export class SignupComponent implements OnInit {
     this.userService.createUser(this.user).subscribe(data => {
       this.goToInvoiceList();
     }, a => {
-      this.responseToaster(a.error.message);
+      console.log(a);
+      this.responseToaster(a.error);
     } ) ;
   }
 

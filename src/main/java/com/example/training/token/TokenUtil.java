@@ -1,5 +1,6 @@
 package com.example.training.token;
 
+import com.example.training.exception.NotFoundException;
 import com.example.training.models.Role;
 import com.example.training.models.User;
 import com.example.training.repositories.UserRepository;
@@ -40,7 +41,7 @@ public class TokenUtil {
             Claims claims = getClaims(token);
             return  claims.getSubject();
         }catch (Exception ex){
-            return null;
+            throw  new NotFoundException("User Not Found");
         }
     }
     public String generateToken(UserDetails userDetails){

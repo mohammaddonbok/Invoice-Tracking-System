@@ -10,6 +10,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice,Long> {
     List<Invoice> findAll();
     List<Invoice> findByOwner(User user );
     int countByOwner(User user);
-
+    List<Invoice> findInvoicesByOwnerIsNull();
 
 }

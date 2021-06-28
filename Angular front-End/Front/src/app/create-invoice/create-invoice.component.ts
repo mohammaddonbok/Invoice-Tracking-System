@@ -34,7 +34,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
   email: string | undefined;
   selectedFile: File | any;
 
-  constructor(public log: UserinfoService, private cdr: ChangeDetectorRef, private shareable: GlobalMethods, private user: UserinfoService, private route: ActivatedRoute, private formBuilder: FormBuilder, private newInvoice: InvoiceServiceService, private router: Router) {
+  constructor(public log: UserinfoService, private cdr: ChangeDetectorRef, private shareable: GlobalMethods,  private route: ActivatedRoute, private formBuilder: FormBuilder, private newInvoice: InvoiceServiceService, private router: Router) {
   }
 
   ngOnDestroy(): void {
@@ -57,7 +57,7 @@ export class CreateInvoiceComponent implements OnInit, OnDestroy {
         this.createdItems = data.invoiceItems;
       }, error => console.log(error));
     }
-    this.user.getAllUsers().subscribe(data => {
+    this.log.getAllUsers().subscribe(data => {
       this.ListOfUsers = data;
     }, error => console.log(error));
     this.invoice = this.formBuilder.group({

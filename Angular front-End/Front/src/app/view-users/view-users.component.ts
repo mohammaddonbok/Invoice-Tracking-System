@@ -3,6 +3,8 @@ import {UserinfoService} from '../userinfo.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {ThemePalette} from '@angular/material/core';
+import {MatDialog} from "@angular/material/dialog";
+
 
 @Component({
   selector: 'app-view-users',
@@ -14,7 +16,7 @@ export class ViewUsersComponent implements OnInit {
   color: ThemePalette = 'accent';
   checked: boolean | undefined;
   disabled = false;
-  constructor( private user: UserinfoService , private router: Router, private toasterService: ToastrService ) { }
+  constructor( private user: UserinfoService , private router: Router, private toasterService: ToastrService  ) { }
 
   ngOnInit(): void {
     this.user.getAllUsers().subscribe(data => {

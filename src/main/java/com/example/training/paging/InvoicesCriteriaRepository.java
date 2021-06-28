@@ -65,6 +65,7 @@ public class InvoicesCriteriaRepository {
             );
         }
         if(invoiceSearchCriteria.getOwner().getRoles().get(0).getName().equals("Super_User") || invoiceSearchCriteria.getOwner().getRoles().get(0).getName().equals("Auditor ")){
+           predicates.add(criteriaBuilder.isNotNull(invoiceRoot.get("owner")));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }else
         if (Objects.nonNull(invoiceSearchCriteria.getOwner())) {

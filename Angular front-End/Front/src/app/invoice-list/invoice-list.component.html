@@ -1,7 +1,7 @@
 <div class="table">
   <h1 class="text-center">Invoices List</h1>
   <div class="overTable">
-  <button class="btn btn-dark" (click)="InvoiceOperatons()" >
+  <button class="btn btn-dark" (click)="InvoiceOperatons()"  *ngIf="hasAccess()">
     Create Invoice
   </button>
     <div class="form-group form-inline search-box">
@@ -9,7 +9,10 @@
       />
     </div>
     <ng-template [ngIf]="isAdmin()">
-    <button class="btn btn-dark" (click)="showUsers()" >
+      <button class="btn btn-dark" (click)="invoicesWithoutOwner()"  >
+        Invoices Without Owner
+      </button>
+    <button class="btn btn-dark" (click)="showUsers()" style="margin-left: 10px" >
       Display Users
     </button>
     </ng-template>

@@ -9,6 +9,7 @@ import {AppComponent} from './app.component';
 })
 export class InvoiceServiceService {
   private baseUrl = 'http://localhost:8080/api/invoices';
+  headers = new HttpHeaders();
   constructor(private httpClient: HttpClient ) {
   }
 
@@ -29,14 +30,15 @@ export class InvoiceServiceService {
     return this.httpClient.get<Invoices[]>(`${this.baseUrl}`);
     // toDo: handel errors
   }
+
   deleteInvoice(id: number): Observable<any>{
-     return this.httpClient.delete(AppComponent.API_URL + `invoice/${id}`);
+     return this.httpClient.delete(AppComponent.API_URL + `invoice/${id}` , { headers: this.headers});
   }
+
   searching(pageNum?: number | any, customerName?: string | any  ): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization' , 'Bearer ' + localStorage.getItem('token'));
     let params;
-    if (customerName){   params = new HttpParams()
-      .set('customerName', customerName);
+    if (customerName){
+      params = new HttpParams().set('customerName', customerName);
     }else
     if (pageNum){
       params = new HttpParams().set('pageNum' , (pageNum - 1).toString());
@@ -45,15 +47,21 @@ export class InvoiceServiceService {
         params = new HttpParams().set('pageNum', '0');
       }
     }
-    return this.httpClient.get<Invoices[]>(AppComponent.API_URL + 'pageAble' , {headers , params});
+    return this.httpClient.get<Invoices[]>(AppComponent.API_URL + 'pageAble' , {headers: this.headers , params});
   }
-
 
 
   getOwnerInvoices(): Observable<any> {
-    const headers = new HttpHeaders().set('Authorization' , 'Bearer ' + localStorage.getItem('token'));
-    return this.httpClient.get<Invoices[]>(AppComponent.API_URL + 'OwnerInvoices' , {headers });
+    return this.httpClient.get<Invoices[]>(AppComponent.API_URL + 'OwnerInvoices' , {headers: this.headers });
+  }
+  getAbstractInvoices(): Observable<Invoices[]> {
+    return this.httpClient.get<Invoices[]>(AppComponent.API_URL + 'abstractInvoices' , {headers: this.headers});
   }
 
-
+  attachOwner(email: string , invoices: object): Observable<any> {
+    const attache = invoices;
+    console.log(invoices);
+    const params = new HttpParams().set('email' , email);
+    return this.httpClient.post(AppComponent.API_URL + 'attachInvoice' , attache , {params});
+  }
 }

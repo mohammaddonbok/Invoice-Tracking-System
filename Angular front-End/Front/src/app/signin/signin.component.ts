@@ -51,7 +51,7 @@ export class SigninComponent implements OnInit {
         localStorage.setItem('token' , '' + res.token);
         this.goToInvoiceList();
         }, a => {
-        this.responseToaster(a.error.message);
+        this.responseToaster(a.error);
   });
 
 }

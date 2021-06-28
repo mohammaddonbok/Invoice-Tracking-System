@@ -10,6 +10,8 @@ import com.example.training.token.TokenUtil;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,7 +51,6 @@ public class PageAbleController {
         return new ResponseEntity<>(pagAbleService.getInvoices(invoicePage, invoiceSearchCriteria),
                 HttpStatus.OK);
     }
-
 
     @PostMapping
     public ResponseEntity<Invoice> addInvoice(@RequestBody Invoice invoice) {

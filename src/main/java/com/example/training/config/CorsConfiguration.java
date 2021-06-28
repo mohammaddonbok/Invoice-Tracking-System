@@ -33,7 +33,10 @@ public class CorsConfiguration implements WebMvcConfigurer {
                 registry.addMapping("/api/pageAble").allowedMethods("GET", "POST", "PUT");
                 registry.addMapping("/api/invoice/*").allowedMethods("GET", "POST", "PUT","DELETE");
                 registry.addMapping("/api/user/*").allowedMethods("GET", "POST", "PUT","DELETE");
-                registry.addMapping("/api/user/*/*").allowedMethods("GET", "POST", "PUT","DELETE");
+                registry.addMapping("/api/user/*").allowedMethods("GET", "POST", "PUT","DELETE");
+                registry.addMapping("/abstractInvoices").allowedMethods("GET", "POST", "PUT","DELETE");
+                registry.addMapping("/attachInvoice").allowedMethods("GET", "POST", "PUT","DELETE");
+
 
             }
         }

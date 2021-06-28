@@ -3,8 +3,8 @@
   <thead>
   <tr>
     <th scope="col">User</th>
-    <th scope="col">Action</th>
     <th scope="col">Status</th>
+    <th scope="col">Action</th>
 
   </tr>
   </thead>
@@ -25,6 +25,10 @@
 <!--        </svg>-->
 <!--      </button>-->
 <!--    </td>-->
+
+    <td>
+      {{status(user.activated)}}
+    </td>
     <td>
       <mat-slide-toggle
         class="example-margin"
@@ -33,9 +37,6 @@
         (click)="changeStatus( user.id, user.activated)"
       >
       </mat-slide-toggle>
-    </td>
-    <td>
-      {{status(user.activated)}}
     </td>
   </tr>
   </tbody>

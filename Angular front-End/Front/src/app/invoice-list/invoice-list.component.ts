@@ -41,7 +41,7 @@ export class InvoiceListComponent implements OnInit {
   // tslint:disable-next-line:typedef
   getInvoices(pageNum?: any) {
     console.log(pageNum);
-    this.invoiceList.searching(pageNum,).subscribe(data => {
+    this.invoiceList.searching(pageNum, ).subscribe(data => {
       console.log(data);
       this.InvoicesList = data.content;
       this.pageSize = data.pageable.pageSize;
@@ -57,6 +57,10 @@ export class InvoiceListComponent implements OnInit {
     this.invoiceList.searching(undefined, this.searchValue).subscribe(data => {
       this.InvoicesList = data.content;
     });
+  }
+  // tslint:disable-next-line:typedef
+  invoicesWithoutOwner(){
+    this.router.navigate(['abstractInvoices']);
   }
 
   // const searchSubscription = fromEvent(this.searchInput.nativeElement, 'keyup').pipe(

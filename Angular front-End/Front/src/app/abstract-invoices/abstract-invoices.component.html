@@ -1,0 +1,38 @@
+<div (click)="openDialog()" class="position">
+<button type="button" class="btn btn-dark " >
+  Select Owner
+</button>
+</div>
+<div class="table">
+<table class="table table-striped text-center">
+  <thead>
+  <tr>
+    <th scope="col">
+      <mat-checkbox class="example-margin"
+                    (change)="setAll($event.checked)">
+
+      </mat-checkbox>
+    </th>
+    <th scope="col">Customer Name</th>
+    <th scope="col">Invoice Number</th>
+    <th scope="col">Total Price</th>
+    <th scope="col">Invoice Date</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr scope="row" *ngFor="let invoice of invoiceObject index as i" >
+    <td >
+
+      <mat-checkbox class="example-margin"
+          [checked]="selected"
+                    (change)="selectOne($event.checked , i)"
+      ></mat-checkbox>
+    </td>
+    <td >{{invoice.customerName}}</td>
+    <td >{{invoice.invoiceNumber}}</td>
+    <td >{{invoice.totalPrice}}</td>
+    <td >{{invoice.invoiceDate | date: 'mediumDate'}}</td>
+    </tr>
+  </tbody>
+</table>
+</div>

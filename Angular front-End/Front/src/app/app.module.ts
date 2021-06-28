@@ -8,7 +8,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SignupComponent} from './signup/signup.component';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {MatInputModule} from '@angular/material/input';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatIconModule} from '@angular/material/icon';
 import {MatNativeDateModule, MatOptionModule} from '@angular/material/core';
 import {InvoiceListComponent} from './invoice-list/invoice-list.component';
@@ -18,15 +18,21 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatTableModule} from '@angular/material/table';
 import {MatExpansionModule} from '@angular/material/expansion';
-import { MatFileUploadModule } from 'angular-material-fileupload';
+import {MatFileUploadModule} from 'angular-material-fileupload';
 import {ToastrModule} from 'ngx-toastr';
 import {ViewInvoiceComponent} from './view-invoice/view-invoice.component';
-import { NavComponent } from './nav/nav.component';
+import {NavComponent} from './nav/nav.component';
 import {MatSelectModule} from '@angular/material/select';
-import { NotFoundComponent } from './not-found/not-found.component';
+import {NotFoundComponent} from './not-found/not-found.component';
 import {MatButtonModule} from '@angular/material/button';
-import { ViewUsersComponent } from './view-users/view-users.component';
+import {ViewUsersComponent} from './view-users/view-users.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {AppInterceptorService} from './app-interceptor.service';
+import { AbstractInvoicesComponent } from './abstract-invoices/abstract-invoices.component';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {SelectionModel} from '@angular/cdk/collections';
+import { SelectOwnerDialogComponent } from './select-owner-dialog/select-owner-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 
 @NgModule({
@@ -40,6 +46,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     NavComponent,
     NotFoundComponent,
     ViewUsersComponent,
+    AbstractInvoicesComponent,
+    SelectOwnerDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,10 +71,16 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatSelectModule,
     MatFileUploadModule,
     MatButtonModule,
-    MatSlideToggleModule
-
+    MatSlideToggleModule,
+    MatCheckboxModule,
+    MatDialogModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AppInterceptorService,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

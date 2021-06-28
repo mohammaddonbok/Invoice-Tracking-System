@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -38,6 +39,7 @@ public class RegistrationController {
 
     @PostMapping(value = "/api/createUser")
     public ResponseEntity<User> register(@Valid @RequestBody User user) {
+
         return service.saveWithUserRole(user);
     }
 //    @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -48,20 +50,20 @@ public class RegistrationController {
 
 @PostMapping(value =  "/logIn")
     public JwtResponse Login(@Valid @RequestBody User user) {
+
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         org.springframework.security.core.userdetails.UserDetails userDetails1 = userDetails.loadUserByUsername(user.getUsername());
 
 
-    if((!(service.getUser(user.getUsername()).getActivated()))){
+        if((!(service.getUser(user.getUsername()).getActivated()))){
         throw new ApiRequestException("Your account have been deactivated");
     }
         String token = tokenUtil.generateToken(userDetails1);
         return new JwtResponse(token);
 
     }
-
     @GetMapping(value = "/api/displayUsers")
     public List<User> showAll(@RequestHeader(value = "Authorization" ,required = false) String header) {
         String token = header.substring("Bearer ".length());
@@ -71,12 +73,13 @@ public class RegistrationController {
         List<User> allUsers = service.findAll(role);
         return allUsers;
     }
-    @DeleteMapping("/api/user/{id}/{status}")
+
+    // TODO: 6/23/2021 : from delete to put and add request body;
+    @PostMapping("/api/user/{id}")
     @ResponseBody
-    public ResponseEntity<Invoice> deleteInvoice(@PathVariable("id") String id , @PathVariable("status") String status){
-        System.out.println(Long.parseLong(id));
-        System.out.println(Boolean.parseBoolean(status));
-        service.changeStatus(Long.parseLong(id) , Boolean.parseBoolean(status));
+    public ResponseEntity<Invoice> userStatus(@PathVariable("id") String id , @RequestBody String status ){
+
+        service.changeStatus(Long.parseLong(id) , Boolean.parseBoolean(status) );
         return ResponseEntity.noContent().build();
     }
 }

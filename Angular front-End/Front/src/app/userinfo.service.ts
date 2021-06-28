@@ -12,6 +12,7 @@ export class UserinfoService {
   // private baseUrl = 'http://localhost:8080/api/display/signup' ;
   // private baseUrl = 'http://localhost:8080/api/createUser' ;
   private baseUrl = 'http://localhost:8080/api/invoices';
+  headers = new HttpHeaders();
 
   // toDo: env production and dev (add enviroment variable)
   constructor(private httpClient: HttpClient) {
@@ -29,9 +30,8 @@ export class UserinfoService {
 
   // tslint:disable-next-line:typedef
   getAllUsers(){
-    const header = new HttpHeaders().set('Authorization' , 'Bearer ' + localStorage.getItem('token') );
 
-    return this.httpClient.get(AppComponent.API_URL + 'displayUsers', { headers: header});
+    return this.httpClient.get(AppComponent.API_URL + 'displayUsers', { headers: this.headers });
   }
   logInUser(email: string, password: string): Observable<any>  {
     const logUser = {
@@ -50,7 +50,7 @@ export class UserinfoService {
     }
   }
   changeStatus(id: number , status: boolean): Observable<any>{
-    return this.httpClient.delete(AppComponent.API_URL + `user/${id}/${status}`);
+    return this.httpClient.post(AppComponent.API_URL + `user/${id}`, status);
 
   }
 

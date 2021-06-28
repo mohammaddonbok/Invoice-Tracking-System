@@ -8,6 +8,7 @@ import {ViewInvoiceComponent} from './view-invoice/view-invoice.component';
 import {NavComponent} from './nav/nav.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {ViewUsersComponent} from './view-users/view-users.component';
+import {AbstractInvoicesComponent} from "./abstract-invoices/abstract-invoices.component";
 
 const routes: Routes = [
   // { path: '**', redirectTo: 'signIn'},
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'ViewComponent/:id' , component: ViewInvoiceComponent},
   {path: 'ViewUsers' , component: ViewUsersComponent},
   {path: 'nav', component: NavComponent, outlet: 'nav' },
+  {path: 'abstractInvoices' , component: AbstractInvoicesComponent},
   {path: '**', component: NotFoundComponent}
 
 ];
