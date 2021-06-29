@@ -8,7 +8,7 @@ import {ViewInvoiceComponent} from './view-invoice/view-invoice.component';
 import {NavComponent} from './nav/nav.component';
 import {NotFoundComponent} from './not-found/not-found.component';
 import {ViewUsersComponent} from './view-users/view-users.component';
-import {AbstractInvoicesComponent} from "./abstract-invoices/abstract-invoices.component";
+import {AbstractInvoicesComponent} from './abstract-invoices/abstract-invoices.component';
 
 const routes: Routes = [
   // { path: '**', redirectTo: 'signIn'},

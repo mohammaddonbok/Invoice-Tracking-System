@@ -3,7 +3,8 @@ import {UserinfoService} from '../userinfo.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {ThemePalette} from '@angular/material/core';
-import {MatDialog} from "@angular/material/dialog";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
 
 
 @Component({
@@ -16,7 +17,8 @@ export class ViewUsersComponent implements OnInit {
   color: ThemePalette = 'accent';
   checked: boolean | undefined;
   disabled = false;
-  constructor( private user: UserinfoService , private router: Router, private toasterService: ToastrService  ) { }
+  dialogRef: MatDialogRef<any> | undefined;
+  constructor( public dialog: MatDialog , private user: UserinfoService , private router: Router, private toasterService: ToastrService  ) { }
 
   ngOnInit(): void {
     this.user.getAllUsers().subscribe(data => {
@@ -42,9 +44,29 @@ export class ViewUsersComponent implements OnInit {
     return 'Active User';
   }
   // tslint:disable-next-line:typedef
+  openConfirmationDialog(id: number , status: boolean) {
+    if (status) {
+    this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: { confirmMessage: 'Are you sure you want to Deactivate?'}
+    });
+    }else{
+      this.dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+        width: '250px',
+        data: { confirmMessage: 'Are you sure you want to Activate?'}
+      });
+    }
+    this.dialogRef.afterClosed().subscribe( (result: any) => {
+      if (result) {
+        this.changeStatus(id , status);
+      }
+      this.ngOnInit();
+    });
+
+  }
+  // tslint:disable-next-line:typedef
   changeStatus(id: number , status: boolean) {
     if (status) {
-      if (confirm('Are you sure you want to deactivate the user?')) {
         this.user.changeStatus(id, false).subscribe((res) => {
             this.showToastr('Successfully Deactivated', 'success');
             this.ngOnInit();
@@ -53,10 +75,7 @@ export class ViewUsersComponent implements OnInit {
             this.ngOnInit();
           }
         );
-      }
-      this.ngOnInit();
     } else {
-      if (confirm('Are you sure you want to activate the user?')) {
         this.user.changeStatus(id, true).subscribe((res) => {
             this.showToastr('Successfully Activated', 'success');
             this.ngOnInit();
@@ -65,8 +84,6 @@ export class ViewUsersComponent implements OnInit {
             this.showToastr('Something went wrong', 'err');
           }
         );
-      }
-      this.ngOnInit();
     }
 
   }

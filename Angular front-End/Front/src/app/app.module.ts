@@ -6,7 +6,7 @@ import {AppComponent} from './app.component';
 import {SigninComponent} from './signin/signin.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SignupComponent} from './signup/signup.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbNavbar} from '@ng-bootstrap/ng-bootstrap';
 import {MatInputModule} from '@angular/material/input';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MatIconModule} from '@angular/material/icon';
@@ -32,7 +32,8 @@ import { AbstractInvoicesComponent } from './abstract-invoices/abstract-invoices
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {SelectionModel} from '@angular/cdk/collections';
 import { SelectOwnerDialogComponent } from './select-owner-dialog/select-owner-dialog.component';
-import {MatDialogModule} from "@angular/material/dialog";
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 
 @NgModule({
@@ -48,6 +49,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     ViewUsersComponent,
     AbstractInvoicesComponent,
     SelectOwnerDialogComponent,
+    ConfirmationDialogComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -74,6 +77,7 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatSlideToggleModule,
     MatCheckboxModule,
     MatDialogModule,
+
   ],
   providers: [
     {

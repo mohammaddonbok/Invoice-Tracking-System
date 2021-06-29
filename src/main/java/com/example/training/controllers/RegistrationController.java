@@ -7,7 +7,6 @@ import com.example.training.models.User;
 import com.example.training.repositories.RoleRepository;
 import com.example.training.repositories.UserRepository;
 import com.example.training.service.Services;
-import com.example.training.service.UserDetails;
 import com.example.training.token.JwtResponse;
 import com.example.training.token.TokenUtil;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+//import org.springframework.security.core.userdetails.UserDetails;
+import com.example.training.service.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,13 @@ public class RegistrationController {
     }
 
     @PostMapping(value = "/api/createUser")
-    public ResponseEntity<User> register(@Valid @RequestBody User user) {
+    public ResponseEntity<User> register(@Valid  @RequestBody User user) {
 
+        User username = service.getUserFromToken();
+        System.out.println(username.getRoles().get(0).getName());
+        if (!username.getRoles().get(0).getName().equals("Super_User")){
+            throw new ApiRequestException("Not Authorized");
+        }
         return service.saveWithUserRole(user);
     }
 //    @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -65,20 +71,23 @@ public class RegistrationController {
 
     }
     @GetMapping(value = "/api/displayUsers")
-    public List<User> showAll(@RequestHeader(value = "Authorization" ,required = false) String header) {
-        String token = header.substring("Bearer ".length());
-        String email = tokenUtil.getUserNameFromToken(token);
-        User user = service.fetchUser(email);
-        Role role = roleRepository.findRoleByUsers(user);
+    public List<User> showAll() {
+      User username = service.getUserFromToken();
+        if (!username.getRoles().get(0).getName().equals("Super_User")){
+            throw new ApiRequestException("Not Authorized");
+        }
+        Role role = roleRepository.findRoleByUsers(username);
         List<User> allUsers = service.findAll(role);
         return allUsers;
     }
 
     // TODO: 6/23/2021 : from delete to put and add request body;
-    @PostMapping("/api/user/{id}")
+    @PutMapping("/api/user/{id}")
     @ResponseBody
     public ResponseEntity<Invoice> userStatus(@PathVariable("id") String id , @RequestBody String status ){
-
+        if (!service.getUserFromToken().getRoles().get(0).getName().equals("Super_User")){
+            throw new ApiRequestException("Not Authorized");
+        }
         service.changeStatus(Long.parseLong(id) , Boolean.parseBoolean(status) );
         return ResponseEntity.noContent().build();
     }

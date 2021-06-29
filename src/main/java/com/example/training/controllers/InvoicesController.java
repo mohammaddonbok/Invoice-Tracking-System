@@ -13,6 +13,7 @@ import com.example.training.token.TokenUtil;
 import com.sun.mail.imap.protocol.Item;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -39,23 +40,33 @@ public class InvoicesController {
     @GetMapping("/invoices")
     //toDo: do pagination and search and sorting
     public List<Invoice> getAllInvoice() {
+
+        if (!invoiceService.getUserFromToken().getRoles().get(0).getName().equals("Super_User")) {
+            throw new ApiRequestException("Not Authorized");
+        }
         return invoiceService.returnAllInvoice();
     }
 
 
     @GetMapping("/OwnerInvoices")
-    public List<Invoice> getUserInvoice(@RequestHeader("Authorization") String header) {
-        String token = header.substring("Bearer ".length());
-        System.out.println(token);
-        String email = tokenUtil.getUserNameFromToken(token);
-        User user = invoiceService.fetchUser(email);
-        return invoiceService.getOwnerInvoicesFromToken(user);
+    public List<Invoice> getUserInvoice() {
+
+        User username = invoiceService.getUserFromToken();
+        if (!username.getRoles().get(0).getName().equals("Super_User") && !username.getRoles().get(0).getName().equals("Support_User") && !username.getRoles().get(0).getName().equals("Auditor")) {
+            throw new ApiRequestException("Not Authorized");
+        }
+        return invoiceService.getOwnerInvoicesFromToken(username);
     }
 
     @PostMapping("/createInvoice")
     public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice,
-                                                 @RequestParam("email") String mail,
-                                                 @RequestHeader("Authorization") String header) {
+                                                 @RequestParam("email") String mail
+    ) {
+
+        User username = invoiceService.getUserFromToken();
+        if (!username.getRoles().get(0).getName().equals("Super_User") && !username.getRoles().get(0).getName().equals("Support_User")) {
+            throw new ApiRequestException("Not Authorized");
+        }
         User Supportuser = invoiceService.fetchUser(mail);
         invoiceService.createInvoice(invoice, Supportuser);
 
@@ -66,78 +77,66 @@ public class InvoicesController {
     @PutMapping("/invoice/{id}")
     public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id,
                                                  @RequestBody Invoice invoiceDetails,
-                                                 @RequestParam("email") String mail,
-                                                 @RequestHeader("Authorization") String header
+                                                 @RequestParam("email") String mail
     ) {
 
-        String token = header.substring("Bearer ".length());
-        System.out.println(token);
-        System.out.println(mail);
+        User username = invoiceService.getUserFromToken();
+        if (!username.getRoles().get(0).getName().equals("Super_User") && !username.getRoles().get(0).getName().equals("Support_User")) {
+            throw new ApiRequestException("Not Authorized");
+        }
         User Supportuser = invoiceService.fetchUser(mail);
-        System.out.println(Supportuser);
         invoiceService.updateInvoice(id, invoiceDetails, Supportuser);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/invoice/{id}")
     public Invoice getOneInvoice(@PathVariable Long id) {
+
+        User username = invoiceService.getUserFromToken();
+        if (!username.getRoles().get(0).getName().equals("Super_User") && !username.getRoles().get(0).getName().equals("Support_User") && !username.getRoles().get(0).getName().equals("Auditor") ) {
+            throw new ApiRequestException("Not Authorized");
+        }
         return invoiceService.getInvoiceById(id);
     }
 
 
     @DeleteMapping("/invoice/{id}")
     @ResponseBody
-    public ResponseEntity<Invoice> deleteInvoice(@PathVariable Long id, @RequestHeader("Authorization") String header) {
-        if (header != null) {
-            String token = header.substring("Bearer ".length());
-            String email = tokenUtil.getUserNameFromToken(token);
-            User user = invoiceService.fetchUser(email);
-            if (user.getRoles().get(0).getName().equals("Super_User") || user.getRoles().get(0).getName().equals("Support_User")) {
+    public ResponseEntity<Invoice> deleteInvoice(@PathVariable Long id) {
+        User username = invoiceService.getUserFromToken();
+        if (!username.getRoles().get(0).getName().equals("Super_User") && !username.getRoles().get(0).getName().equals("Support_User")) {
+            throw new ApiRequestException("Not Authorized");
+        }
                 invoiceService.deleteSpecificInvoice(id);
                 return ResponseEntity.noContent().build();
             }
-            throw new MissingRequestHeaderException("Un Authorized");
-        }
-        throw new MissingRequestHeaderException("Un Authorized");
-    }
+
 
     @GetMapping("/abstractInvoices")
-    public List<Invoice> getAbstractInvoices(@RequestHeader("Authorization") String header) {
-
-        if (header != null) {
-            String token = header.substring("Bearer ".length());
-            String email = tokenUtil.getUserNameFromToken(token);
-            User user = invoiceService.fetchUser(email);
-            if (user.getRoles().get(0).getName().equals("Super_User")) {
-                return invoiceService.getAbstractInvoice();
-            } else {
-                throw new ApiRequestException("Not Authorized");
-            }
+    public List<Invoice> getAbstractInvoices() {
+        if (!invoiceService.getUserFromToken().getRoles().get(0).getName().equals("Super_User")) {
+            throw new ApiRequestException("Not Authorized");
         }
-        throw new MissingRequestHeaderException("Un Authorized");
+        return invoiceService.getAbstractInvoice();
     }
-
     @PostMapping("/attachInvoice")
-    public ResponseEntity<Object> attachInvoices(@RequestHeader("Authorization") String header,
+    public ResponseEntity<Object> attachInvoices(
                                                  @RequestBody ArrayList<InvoiceDto> invoices,
                                                  @RequestParam("email") String mail) {
-        if (header != null) {
-            String token = header.substring("Bearer ".length());
-            String email = tokenUtil.getUserNameFromToken(token);
+        User username = invoiceService.getUserFromToken();
+        if (!username.getRoles().get(0).getName().equals("Super_User") && !username.getRoles().get(0).getName().equals("Support_User")) {
+            throw new ApiRequestException("Not Authorized");
+        }
             User user = invoiceService.fetchUser(mail);
+            Invoice inv;
             for (int i = 0; i < invoices.size(); i++) {
-                if (invoices.get(i).getActive()){
-                   Invoice inv = invoiceService.getInvoiceById(invoices.get(i).getId());
-                   inv.setOwner(user);
-                   invoiceRepository.save(inv);
+                if (invoices.get(i).getActive()) {
+                    inv = invoiceService.getInvoiceById(invoices.get(i).getId());
+                    inv.setOwner(user);
+                    invoiceRepository.save(inv);
                 }
             }
             return new ResponseEntity<Object>(HttpStatus.CREATED);
         }
-        throw new ApiRequestException("Not Authorized");
-
-    }
-
-
 
 }

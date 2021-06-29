@@ -50,7 +50,7 @@ export class UserinfoService {
     }
   }
   changeStatus(id: number , status: boolean): Observable<any>{
-    return this.httpClient.post(AppComponent.API_URL + `user/${id}`, status);
+    return this.httpClient.put(AppComponent.API_URL + `user/${id}`, status);
 
   }
 

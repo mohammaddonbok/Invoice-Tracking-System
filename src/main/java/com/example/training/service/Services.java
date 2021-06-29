@@ -14,6 +14,7 @@ import com.example.training.token.TokenUtil;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -138,6 +139,13 @@ public class Services {
         else {
             return invoiceRepository.findInvoicesByOwnerIsNull();
         }
+    }
+
+    public User getUserFromToken(){
+        Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email = ((User) principle).getUsername();
+        User username = fetchUser(email);
+        return username;
     }
 
 }

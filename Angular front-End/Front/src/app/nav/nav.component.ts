@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {UserinfoService} from '../userinfo.service';
 import {Router} from '@angular/router';
 import {environment} from '../../environments/environment';
@@ -12,6 +12,7 @@ import {GlobalMethods} from '../globalMethods';
 export class NavComponent implements OnInit {
   constructor( public log: UserinfoService , public router: Router ,  private shareable: GlobalMethods) { }
   extractToken: any ;
+
   ngOnInit(): void {
     this.extractToken = this.shareable.getDecodedAccessToken(localStorage.getItem('token'));
   }
@@ -51,5 +52,6 @@ export class NavComponent implements OnInit {
   goToSignIn() {
     this.router.navigate(['/signIn']);
   }
+
 
 }

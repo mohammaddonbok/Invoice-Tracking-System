@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {UserinfoService} from '../userinfo.service';
-import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
 import {InvoiceServiceService} from "../invoice-service.service";
 import {Router} from "@angular/router";
@@ -22,7 +22,11 @@ export class SelectOwnerDialogComponent implements OnInit {
   email: string | any;
   invoiceList: object | any;
 
-  constructor(  private router: Router, private invoice: InvoiceServiceService, private user: UserinfoService, @Inject(MAT_DIALOG_DATA) public data: DialogData, private formBuilder: FormBuilder) {
+  constructor(  private router: Router,
+                public dialogRef: MatDialogRef<any>,
+                private invoice: InvoiceServiceService,
+                private user: UserinfoService,
+                @Inject(MAT_DIALOG_DATA) public data: DialogData, private formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
@@ -38,7 +42,7 @@ export class SelectOwnerDialogComponent implements OnInit {
 
   onSubmit() {
     this.email = this.invoiceOwner.controls.owner.value;
-    this.invoice.attachOwner(this.email, this.data).subscribe(data => console.log('done'));
+    this.invoice.attachOwner(this.email, this.data).subscribe(data =>     this.dialogRef.close(true) );
   }
 
 }

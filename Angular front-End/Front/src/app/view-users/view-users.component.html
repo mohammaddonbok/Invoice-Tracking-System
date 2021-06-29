@@ -34,7 +34,7 @@
         class="example-margin"
         [color]="color"
         [checked]="user.activated"
-        (click)="changeStatus( user.id, user.activated)"
+        (click)="openConfirmationDialog( user.id, user.activated)"
       >
       </mat-slide-toggle>
     </td>

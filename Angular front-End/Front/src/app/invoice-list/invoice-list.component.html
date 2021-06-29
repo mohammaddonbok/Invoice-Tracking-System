@@ -51,7 +51,9 @@
         <td>{{ invoice.invoiceDate | date: 'mediumDate' }}</td>
         <ng-template [ngIf]="hasAccess()">
         <td>
-          <button class="btn btn-dark" (click)="InvoiceOperatons(invoice.id)">
+          <button class="btn btn-dark"
+                  mat-raised-button
+                  (click)="InvoiceOperatons(invoice.id)">
             <svg
 
               xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -64,7 +66,7 @@
         </td>
         <td>
           <button class="btn btn-dark"
-                  (click)="deleteInvoice(invoice.id)"
+                    mat-raised-button (click)="openConfirmationDialog(invoice.id)"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                  class="bi bi-trash-fill"
@@ -76,7 +78,9 @@
         </td>
         </ng-template>
         <td>
-          <button class="btn btn-dark" (click)="viewInvoice(invoice.id)">
+          <button class="btn btn-dark"
+                  mat-raised-button
+                  (click)="viewInvoice(invoice.id)">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye"
                  viewBox="0 0 16 16">
               <path

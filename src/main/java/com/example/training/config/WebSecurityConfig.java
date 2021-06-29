@@ -49,10 +49,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/displayUsers","/logIn","/api/user/*", "/attachInvoice","abstractInvoices","/api/OwnerInvoices","/api/invoice/*","/api/user/*","/api/pageAble*","/api/createInvoice*","/api/createUser*").permitAll()
+                .antMatchers("/logIn").permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/invoices").authenticated()
+                .antMatchers("/api/invoices","/api/invoice/*","/api/displayUsers"
+                        ,"/api/user/*", "/attachInvoice","abstractInvoices","/api/OwnerInvoices","/api/pageAble*","/api/createInvoice*","/api/createUser*"
+                        ).authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);

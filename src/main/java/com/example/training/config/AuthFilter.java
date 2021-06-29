@@ -80,6 +80,7 @@ public class AuthFilter implements Filter {
                             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                             SecurityContextHolder.getContext().setAuthentication(authentication);
+
                             filterChain.doFilter(req, res);
                         } else if (!tokenUtil.isTokenValid(token, userDetails)) {
                             throw new ApiRequestException("Invalid Token");

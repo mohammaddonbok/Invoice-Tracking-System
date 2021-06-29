@@ -8,6 +8,8 @@ import {debounceTime} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {GlobalMethods} from '../globalMethods';
 import {UserinfoService} from "../userinfo.service";
+import {ConfirmationDialogComponent} from "../confirmation-dialog/confirmation-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 @Component({
   selector: 'app-invoice-list',
@@ -25,11 +27,11 @@ export class InvoiceListComponent implements OnInit {
   extractToken: any;
 
   // tslint:disable-next-line:max-line-length
-  constructor(private invoiceList: InvoiceServiceService, private router: Router, public toasterService: ToastrService, private shareable: GlobalMethods , private  user: UserinfoService) {
+  constructor(public dialog: MatDialog, private invoiceList: InvoiceServiceService, private router: Router, public toasterService: ToastrService, private shareable: GlobalMethods, private  user: UserinfoService) {
   }
 
   ngOnInit(): void {
-    if (!this.user.loggedIn()){
+    if (!this.user.loggedIn()) {
       this.router.navigate(['signIn']);
     }
     this.extractToken = this.shareable.getDecodedAccessToken(localStorage.getItem('token'));
@@ -39,9 +41,23 @@ export class InvoiceListComponent implements OnInit {
   }
 
   // tslint:disable-next-line:typedef
+  openConfirmationDialog(id: number) {
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '250px',
+      data: {confirmMessage: 'Are you sure you want to delete?'}
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result) {
+        this.deleteInvoice(id);
+      }
+    });
+  }
+
+  // tslint:disable-next-line:typedef
   getInvoices(pageNum?: any) {
     console.log(pageNum);
-    this.invoiceList.searching(pageNum, ).subscribe(data => {
+    this.invoiceList.searching(pageNum,).subscribe(data => {
       console.log(data);
       this.InvoicesList = data.content;
       this.pageSize = data.pageable.pageSize;
@@ -55,11 +71,16 @@ export class InvoiceListComponent implements OnInit {
   search(event: any) {
     this.searchValue = event.target.value;
     this.invoiceList.searching(undefined, this.searchValue).subscribe(data => {
+      console.log(data);
       this.InvoicesList = data.content;
+      this.pageNumber = data.pageable.pageNumber + 1;
+      this.total = data.totalElements;
+      
     });
   }
+
   // tslint:disable-next-line:typedef
-  invoicesWithoutOwner(){
+  invoicesWithoutOwner() {
     this.router.navigate(['abstractInvoices']);
   }
 
@@ -74,14 +95,14 @@ export class InvoiceListComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   InvoiceOperatons(id?: number) {
-    if (id){
+    if (id) {
       this.router.navigate(['/CreateInvoice', id]);
-    }
-    else{
+    } else {
       this.router.navigate(['/CreateInvoice']);
 
     }
   }
+
   // createInvoice(id: number){
   // }
 
@@ -92,15 +113,13 @@ export class InvoiceListComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   deleteInvoice(id: number) {
-    if (confirm('Are you sure you want to delete?')) {
-      this.invoiceList.deleteInvoice(id).subscribe((res) => {
-          this.showToastr('Successfully Deleted', 'success');
-          this.getInvoices();
-        }, (error) => {
-          this.showToastr('Something went wrong', 'err');
-        }
-      );
-    }
+    this.invoiceList.deleteInvoice(id).subscribe((res) => {
+        this.showToastr('Successfully Deleted', 'success');
+        this.getInvoices();
+      }, (error) => {
+        this.showToastr('Something went wrong', 'err');
+      }
+    );
   }
 
   // tslint:disable-next-line:typedef
@@ -119,8 +138,9 @@ export class InvoiceListComponent implements OnInit {
   hasAccess() {
     return this.extractToken.role === environment.permissions_Super || this.extractToken.role === environment.permission_Support;
   }
+
   // tslint:disable-next-line:typedef
-  isAdmin(){
+  isAdmin() {
     return this.extractToken.role === environment.permissions_Super;
   }
 
@@ -128,8 +148,9 @@ export class InvoiceListComponent implements OnInit {
   viewOwner() {
     return this.extractToken.role === environment.permissions_Super || this.extractToken.role === environment.permission_Auditor;
   }
+
   // tslint:disable-next-line:typedef
-  showUsers(){
+  showUsers() {
     this.router.navigate(['ViewUsers']);
   }
 }
